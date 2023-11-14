@@ -1,0 +1,185 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+%\documentclass[letterpaper, 12 pt, conference]{ieeeconf}  % Comment this line out
+                                                          % if you need a4paper
+\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
+                                                          % paper
+
+\IEEEoverridecommandlockouts                              % This command is only
+                                                          % needed if you want to
+                                                          % use the \thanks command
+\overrideIEEEmargins
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+
+% The following packages can be found on http:\\www.ctan.org
+\usepackage{graphicx} % for pdf, bitmapped graphics files
+\usepackage{bm}
+\newcommand{\uvec}[1]{\boldsymbol{\hat{\textbf{#1}}}}
+%\usepackage{epsfig} % for postscript graphics files
+\usepackage{mathptmx} % assumes new font selection scheme installed
+\usepackage{times} % assumes new font selection scheme installed
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amssymb}  % assumes amsmath package installed
+
+\title{\LARGE \bf
+Analysis of UAV Swarm Control using Mean Field Games
+}
+
+\author{Jayamurugan Ravikumar}
+
+\begin{document}
+
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+	Swarm robot systems, in which multiple agents cooperate together to perform certain task, has  great attracted attention in the recent years due to their potential in search and rescue, drone art, mapping, surveying, etc. There exists a trade off in the performane and scalability when controlling these system. To address this difficulty, Mean Field Games is applied using two coupled PDEs where the forward equation governs the evolution of the robot's distribution, and the backward equation is used to understand the beahviour of the individual robots. 
+
+
+
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{INTRODUCTION}
+
+The developement in robotics, has brought forth an increased involment of autonomous robots in many fileds, where they play a crucial role in applications such as search and resuce, 3D mapping, military operatiions and transportation systems\cite{b3}. This has paved a way for the possibility of using using multiple robots to achieve the tasks that are beyond the capabilities of an individual robot. The concept of swarm robot systems, is developed to perform a task using a number of robots through their collective behaviour, thus increasing the performance for sophisticated tasks\cite{b4}. This has beed realized due to the developement of small and inexpensive robots, which are used in the pratical applications such as, mapping, military operatiions, surveying, search and resuce, drone art, etc\cite{b6}. Thus studying and controlling the behaviour of swarm robots by controlling individual robots is an important task with many advantages.
+
+
+However,many challenges should be overcomed to achieve these advantages. The main challanges are. Firstly, the problem of how to assign the tasks to each robot scientifically. In a swarm system there will be set of tasks, that each robot should take charge of their task. Since the strategies of each robot will have an impact on their collective behaviour, as a result the interaction between them will increse exponentially with enlargment in the number of robots. This will result in an higher computational complexity, making it hard for the controller to make assigment decisions. Secondly, when the number of robots is large, it will be difficult for the robots to optimize their trajectory due to the mutual influence of the robots on each other\cite{b4}. Thirdly, to attain the safness of position the energy spent by the robot should be reduced, as well as it should be able to attain a local optima. These are commonly known as problem inherent to general large scale systems, including swarm robot systems\cite{b6}.  
+
+
+Game theory has been considered promising to attain optimal control policies for in a mobile robot swarm system. It has been applied in many fields such as, a cooperative nonzero-sum game is generated to achieve the optimal strategy for each robot system, a global game is proposed in a multi-robot task allocation model with limited information, a Stackelberg algorithm is formulated to  improve the convergence of the Llyod algorithm in a multi-robot convergence system\cite{b6}. However using the traditional game theory will create a complex system with a high computational complexity when the number of involved agents is large.The general bottom up approaches such as, evolutionary robotics and reinforcement learining cannot guarantee to achieve the desired global behaviour\cite{b3}. To overcome these problems, the concept of mean-field games which cosists of two PDEs is considered in this paper for an optimal control over the swarm robot system.
+
+
+\subsection{Mean Field Game}
+
+Mean field games is a framework that was proposed by Larsy and Lions as explained in \cite{b1}. It has been used in been used in many applications in financial, technological, industrial, etc innovations\cite{b4}. It consists of systems of partial diffrential equations, used to deduce a macroscopic model for descibing the density of the agents, while aslo taking into account of the microscopic dynamics of each agent\cite{b1}\cite{b6}. In other words, it is used to understand the behaviour of multiple robots that tries to optimimize their position in space and time, while their prefernces being partially determined by the choices that the other robots in the swarm, in the asymptotic limit where\cite{b1} MFG approximates $N$ dimensional optimal control problem as a one-dimensional problem, with $N$ being the number of robots which constitutes the swarm\cite{b6}. 
+
+Two key assumptions are made in order to realize MFG, \emph{homogeneity} and \emph{unlimitedness}. Homogeneity means that the dynamics and evaluation functions are same for all the agents, and unlimitedness indicates that the number of agents is infinitely large, i.e., $N \rightarrow \infty$, which are reasonale assumptions in many large-scale systems\cite{b1}\cite{b6}. By exploiting these assumptions we can derive the macroscopic model, such that the optimal input is obtained with a much shorter computational time than the $N$ dimensional problem, while taking into account of the influence of the agents nearby\cite{b6}. Under these assumptions, the mean field games is epressed as a cpoupled system of two equations, a Fokker-Planck equation that governs the evolution of the density function $m$ evolving forward in time, and a Hamiltom-Jacobi-Bellman equation that governs the computational of the optimal path by evolving backward in time. This combination of both forward and backward propagation in time creates an \emph{elliptic} phenomena in the time variable that is not seen in the conventional evolution equations. For example, in the mexican wave system this model predicts that such waves only occur in stadiums that exceed a certaim minimum size\cite{b1}. We will see in detail how these equations contribute to our problem of optimal control of a swarm system.\\
+
+
+\subsubsection{Hamiltom-Jacobi-Bellman Equations}
+
+\hfil \break
+
+The HJB equation governs the computation of the optimal path of each agent. Let us consider a single agent trying to optimze it's path in space and time with respet to a fixed cost function that should be minimized. Suppose that an agent is at a location $x(0)$ at time $t=0$ in a Eculidean space $R^d$ and would like to end up at a location $x(T)$ at a time $t=T > 0$ to attain safeness. We consider that each location $x$ in the space $R^d$ has a cost $u(T,x) \in R$ a the final time $T$, which is large when x is not a desirable location and small otherwise. The agent will try to minimize the cost $u(T, x(T))$. Here we also consider the cost incurred due to the transportation i.e. moving with a fast velocity value will incurr cost. The agents should reach their position, while avoiding the abusing of greater velocities. Leading us to a optimal control problem such that the agent satisfies both the conditions\cite{b8}. We introduce a cost function $C : R^d \rightarrow R$, where $C(v)dt$ will give the marginal cost of moving at a given velocity $v$ for the time $dt$, This will give the total cost of a trajectory $x : [0,T] \rightarrow R^d$ by,
+
+$$\displaystyle  u(T, x(T)) + \int_0^TC(x'(t))\ dt$$
+
+We have to select a trjectory that will minimize this cost. Thus our model depends only on velocity and not on position and time. We will asssume $C$ to be strictly concave and $C$ is even, thus $C(-v)=C(v)$. We then Generalize the initial time $0$ to any other time $t_0$, where $0 \leq t \leq T$ and $x_0 \in R^d$, defines the optimal cost $u(t_0, x_0)$ at the point $(t_0, x_0)$ as, 
+
+$$\displaystyle  u(T, x(T)) + \int_{t_0}^TC(x'(t))\ dt$$
+
+Considering the agent moves at a velocity $v$ for a infinitesimal time $dt$, such that it ends up in a new position $x_0 + vdt$ at time $t_0 + dt$. The optimal cost for the agent's journey is given by,
+
+$$\displaystyle u(t_0,x_0) = u(t_0+dt,x_0+vdt) + C(v) dt$$
+
+The velocity of the agent $v$ is choosen in such a way that it reduces the final cost. Such that it would minimize the expression
+
+$$\displaystyle v \cdot \nabla_x u(t_0,x_0) + C(v),$$
+
+From strict convexity the minimum of $v$ will be unique and will be a function of f ${\nabla_x u(t_0,x_0)}$ we introduce \emph{Legendre transform} ${H: {R}^d \rightarrow {R}} of {C: {R}^d \rightarrow {R}}$, leading to the HJB equation,
+
+$$\displaystyle -\partial_t u + H(\nabla_x u) = 0$$
+
+The optimal cost is prescribed at the final time $t = T$, whereas we are intrested in its value at earlier times, in particular when $t = 0$. Thus we can find the optimal velocity $v = v(x_0, t_0)$ to travel to each location $(x_0, t_0)$, such that the velocity is given by, 
+
+$$\displaystyle v = - H'( \nabla_x u )$$
+
+All agents try to converge to a safest point following their trajectories. But in reality even if the agent would probably like to be in the safest point, there may not get a chance, as the crowdedness will have them knocking one another. One way of interpreting that, is to say that they won’t be in total control of their trajectories, kind of like a grain of pollen floating in water. This effect is called \emph{Brownian Motion}. The important effect of Brownian motion is that there is a natural tendency for agents to go from crowded regions to less crowded ones. Thus, while safeness makes agents converge to a single safest point, the Brownian motion spreads them in space\cite{b8}. To make our problem realistic we add Brownian motion where $\sigma > 0$ indicates the noise,
+
+$$\displaystyle u(t_0,x_0) = u(t_0,x_0) + \partial_t u_0(t_0,x_0) dt + v \cdot \nabla_x u_0(t_0,x_0) dt$$
+$$\displaystyle + \frac{\sigma^2}{2} \Delta u(t_0,x_0) dt + C(v) dt$$
+
+We obtain the viscous HJB equation,
+
+$$\displaystyle -\partial_t u - \nu \Delta u + H(\nabla_x u) = 0$$
+
+\subsubsection{Fokker-Planck Equations}
+
+\hfil \break
+
+The Hamiltom-Jacobi-Bellman equation tells us how individual agents react. Whereas in the Fokker-Planck equation instead of dealing with each agent seperately we conisder all of them to be a single mass\cite{b8}. We consider a large number $N$ of identical agents, such that they are all trying to minimize the same cost function. When the number of agents is very larger $N \rightarrow \inf$, we just consider it as a density function $m(t,x)$, which is non-negative with a total mass of ${\int_{{\bf R}^d} m(t,x)\ dx = 1}$ for each time $t$. Which implies that there should be approximately ${N m(t,x) |dx|}$ in the infinitesimal domain ${[x,x+dx]}$.
+
+The evolution of the distribution with the initial distribution $m(0,x)$ and the velocity field $v$ is found by testing the density $m(t,x)$ against various test functions $F(x)$. The integral ${\int_{{\bf R}^d} m(t,x) F(x) \ dx}$ can be viewed as the continuum limit of the sum ${\frac{1}{N} \sum_{i=1}^N F(x_i(t))}$, where ${x_i(t)}$ is the location of the ${i^{th}}$ agent at time ${t}$. At time ${t}$, the ${i^{th}}$ agent should move at velocity ${v(t,x_i(t))}$. Which gives the relation,
+
+$$\displaystyle \int_{{R}^d} m(t,x) F(x)\ dx \approx \frac{1}{N} \sum_{i=1}^N F(x_i(t))$$
+
+For every test function $F$ we have,
+
+$$\displaystyle \int_{{R}^d} (\partial_t m(t,x) + \nabla\cdot (mv)(t,x)) F(x)\ dx = 0$$
+
+giving us the advection equation infering to the movement of the mass,
+
+$$\displaystyle \partial_t m(t,x) + \nabla\cdot (mv)(t,x) = 0$$
+
+Considering the brownian noise similar to the HJB equation we get,
+
+$$\displaystyle \int_{{R}^d} m(t,x) (F(x) + v dt \cdot \nabla F(x) + \frac{\sigma^2}{2} \Delta F(x) dt)\ dx$$
+
+Leading us to the Fokker-Planck-equation,
+
+$$\displaystyle \partial_t m(t,x) - \nu \Delta m(t,x) + \nabla \cdot (mv)(t,x) = 0$$
+
+where ${\nu := \sigma^2/2}$.
+
+
+The cost function in the HJB equation did not depend on the other agents, while the mean field games generalizes this model, by allowing the cost function of each agent to depend in the density function m of all other agents. This generalization is achieved by a simple additive model here,
+
+$$\displaystyle u(T, x(T)) + \int_0^T C(x'(t))\ dt + \int_0^T F(m(t,x(t)))\ dt$$
+
+Here $u(T, x(T))$ is the cost function to reach a target location, $C(x_{'}(t))$ is the velocity cost function and $F: R^+ \rightarrow R$ represents the marginal cost to an agent of having a given density at the current location. IF $F$ is increasing, the agent prefers to be away form other agents, a decreasing $F$ leafs to an attractive effect.
+
+Thus rephrasing the Hamiltom-Jacobi-Bellman equations as,
+
+$$\displaystyle -\partial_t u - \nu \Delta u + H(\nabla_x u) = F(m)$$
+
+The Fokker-Planck becomes,
+
+$$\displaystyle - \partial_t m + \nu \Delta m + \nabla_x \cdot(m H'(\nabla_x u)) = 0$$
+
+Given the initial $m(0,x)$ for $m$ at time 0 and the final data for $u(T,x)$ for $u$ at time $T$, then the above system of equations is an example of mean field game. Where the Fokker-Planck represents where the agents will eventually end up based on the initial distribution and the Hamiltom-Jacobi-Bellman equation represents the agents decesion based on where they want to be in the future. There exists some cases where the existence or uniqueness or both breakdown, but there are situations where they are well behaved such as, when we have a small T i.e. we plan ony for a short period of time, having positive viscosity and having an increasing $F$ all help significantly for having a good existence and uniqueness theory.
+
+\section{Implementation}
+
+
+
+\subsection{Observation}
+
+
+
+
+
+
+
+
+\section{Conclusion}
+
+     
+
+\begin{thebibliography}{99}
+
+	\bibitem{b1} Tao
+	\bibitem{b2} Y. Kang, S. Liu, H. Zhang, Z. Han, S. Osher and H. V. Poor, "Task Selection and Route Planning for Mobile Crowd Sensing Using Multi-Population Mean-Field Games," ICC 2021 - IEEE International Conference on Communications, 2021, pp. 1-6, doi: 10.1109/ICC42927.2021.9500261.
+	\bibitem{b3} Z. Liu, B. Wu and H. Lin, "A Mean Field Game Approach to Swarming Robots Control," 2018 Annual American Control Conference (ACC), 2018, pp. 4293-4298, doi: 10.23919/ACC.2018.8431807.
+	\bibitem{b4} Kang, Yuhan and Liu, Siting and Lee, Wonjun and Zhang, Hongliang and Li, Wuchen and Han, Zhu. (2020). Joint Task Assignment and Trajectory Optimization for a Mobile Robot Swarm by Mean-Field Game. 1-6. 10.1109/GLOBECOM42002.2020.9322422.  
+	\bibitem{b5} Y. Kang, S. Liu, H. Zhang, Z. Han, S. Osher and H. V. Poor, "Task Selection and Collision-Free Route Planning for Mobile Crowdsensing Using Multi-Population Mean-Field Games," in IEEE Transactions on Green Communications and Networking, vol. 5, no. 4, pp. 1947-1960, Dec. 2021, doi: 10.1109/TGCN.2021.3086001.
+	\bibitem{b6} Inoue, Daisuke and Yoshida, Hiroaki. "Optimal Coverage Control for Swarm Robot Systems using a Mean Field Game" arXiv:2004.07994, 2020.
+	\bibitem{b7} Timm
+	\bibitem{b8} Science for all
+
+\end{thebibliography}
+
+
+
+
+\end{document}
